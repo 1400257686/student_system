@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>学生信息管理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="css/adminLogin.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" onclick="insert()">添加数据</button>
+    </div>
+</script>
+<script>
+    function insert(){
+        layer.open({
+            type:'1',
+            content:$('.registerPage'),
+            title:'添加',
+            area:['500px','600px'],
+            closeBtn:'1',
+        })
+        $('#ctno').attr("readonly",false);
+        $('#cno').attr("type","hidden");
+        $('#cno').val("-1");
+        $('#cname').val("");
+        $('#ccredit').val("");
+        $('#ctime').val("");
+        $('#ctno').val("");
+        document.myform.action="/course/insert?root=academy";
+    }
+</script>
+<script>
+    function sumbit() {
+        var tno=$('#ctno').val();
+        $.ajax({
+            type:'post',
+            url:window.location.protocol+'//'+window.location.host+"/teacher/findbytno?tno="+tno,
+            contentType:'application/text',
+            success:function (data) {
+                if(data==false){
+                    alert("教师不存在");
+                    window.location.href ="/redirect?url=academy/course";
+                    a=false;
+                }else {
+                    a=true;
+                }
+            }
+        });
+    }
+    function checkinput(){
+        return a;
+    }
+</script>
+<script src="layui/layui.js" charset="utf-8"></script>
+
+<script th:inline="javascript">
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#test'
+            ,url:'/course/findbyacademy?academy='+[[${session.id}]]
+            ,cellMinWidth: 80
+            ,title: '课程数据表'
+            ,toolbar: '#toolbarDemo'
+            ,cols: [
+                [
+                    {field:'cno', title:'课程号',sort: true,}
+                    ,{field:'cname', title:'课程名'}
+                    ,{field:'ccredit', title:'学分'}
+                    ,{field:'ctime', title:'上课时间'}
+                    ,{field: 'ctname', title: '任课教师'}
+                    ,{field: 'ctno', title: '教师工号'}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
+                ]
+            ]
+            ,page: true
+        });
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            if(layEvent === 'del'){ //删除
+                $.ajax({
+                    type:'post',
+                    url:window.location.protocol+'//'+window.location.host+"/course/delete?cno="+data.cno,
+                    dataType:'html',
+                    data:JSON.stringify(data),
+                    contentType:'application/json',
+                    success:function () {
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                    }
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                layer.open({
+                    type:'1',
+                    content:$('.registerPage'),
+                    title:'编辑',
+                    area:['500px','600px'],
+                    closeBtn:'1',
+                })
+                $('#ctno').attr("readonly",true);
+                $('#cno').attr("type","text");
+                $('#cno').val(data.cno);
+                $('#cname').val(data.cname);
+                $('#ccredit').val(data.ccredit);
+                $('#ctime').val(data.ctime);
+                $('#ctno').val(data.ctno);
+                document.myform.action="/course/update?root=academy";
+            }
+        });
+    });
+
+</script>
+
+</body>
+<div class="registerPage">
+    <div class="registerDiv">
+        <form name="myform" class="layui-form layui-form-pane" method="post" action="" onsubmit="return checkinput();">
+            <div class="layui-form-item">
+                <label class="layui-form-label">课程号</label>
+                <div class="layui-input-inline">
+                    <input readonly="readonly" type="text" name="cNo" id="cno"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">课程名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cName" id="cname" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学分</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="cCredit" id="ccredit" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上课时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cTime" id="ctime" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label id="ctnolabel" class="layui-form-label">教师工号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cTno" id="ctno" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="sumbit()">立即提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</html>

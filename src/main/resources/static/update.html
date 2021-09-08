@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/adminLogin.css">
+</head>
+<body>
+<div class="wrap">
+    <img src="images/index.jpg" class="imgStyle">
+    <div class="loginForm">
+        <form>
+            <div class="logoHead">
+            </div>
+            <div class="usernameWrapDiv">
+                <div class="usernameLabel">
+                    <label>用户名:</label>
+                </div>
+                <div class="usernameDiv">
+                    <i class="layui-icon layui-icon-username adminIcon"></i>
+                    <input id="updateUsername" class="layui-input adminInput" type="text" name="id" placeholder="输入用户名" >
+                </div>
+            </div>
+            <div class="usernameWrapDiv">
+                <div class="usernameLabel">
+                    <label>新密码:</label>
+                </div>
+                <div class="passwordDiv">
+                    <i class="layui-icon layui-icon-password adminIcon"></i>
+                    <input id="updatePassword" class="layui-input adminInput" type="password" name="password" placeholder="输入密码">
+                </div>
+            </div>
+            <div class="usernameWrapDiv">
+                <div class="submitLabel">
+                    <label>确定修改?</label>
+                </div>
+                <div class="submitDiv">
+                    <input id="loginBtn" type="button" class="submit layui-btn layui-btn-primary" value="确定"></input>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="layui/layui.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        // 登陆事件
+        $('#loginBtn').click(function () {
+            update();
+        });
+    });
+    function validateCode() {
+        var updateUsername = $('#updateUsername').val();
+        var updatePassword = $('#updatePassword').val();
+        if ($.trim(updateUsername) == '' || $.trim(updateUsername).length<=0){
+            layer.alert("用户名不能为空");
+            return false;
+        }
+        if ($.trim(updatePassword) == '' || $.trim(updatePassword).length<=0){
+            layer.alert("密码不能为空");
+            return false;
+        }
+        return true;
+    }
+    function update() {
+        if (!validateCode()){
+            //阻断提示
+        }else {
+            var updateUsername = $('#updateUsername').val();
+            var updatePassword = $('#updatePassword').val();
+            var params = {};
+            params.updateUsername = updateUsername;
+            params.updatePassword = updatePassword;
+            var loginLoadIndex = layer.load(2);
+            $('#loginBtn').val("waiting...");
+            $.ajax({
+                type:'post',
+                url:window.location.protocol+'//'+window.location.host+'/update?id='+updateUsername+'&password='+updatePassword,
+                dataType:'html',
+                data:JSON.stringify(params),
+                contentType:'application/json',
+                success:function (data) {
+                    if (data == "true"){
+                        alert("成功");
+                        window.location.href = "index.html";
+                    }else {
+                        alert("失败");
+                        window.location.href="/redirect?url=update";
+                    }
+                },
+                error:function () {
+                    layer.close(loginLoadIndex);
+                    $('#loginBtn').val("登录");
+                }
+            });
+        }
+
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxl.repository.SelectRepository">
+    <!--查询已选课-->
+    <select id="findbyselect"  resultType="java.lang.Integer">
+        select  c_no from select_course where s_no=#{sno} limit #{start},#{limit}
+    </select>
+    <!--查询已选课数量-->
+    <select id="countbyselect"  resultType="java.lang.Integer">
+        select  count(*) from select_course where s_no=#{sno}
+    </select>
+    <!--按学生号查询上课时间-->
+    <select id="findtimebysno" parameterType="java.lang.String" resultType="java.lang.String">
+        select c_time
+        from course a join select_course b
+        on a.c_no=b.c_no
+        where s_no=#{sno}
+    </select>
+    <!--插入学生选课数据-->
+    <insert id="select">
+        insert into select_course(s_no,c_no) values (#{sno},#{cno})
+    </insert>
+    <cache/>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxl.repository.FileRepository">
+    <!--添加新文件数据-->
+    <insert id="insert">
+        insert into file(f_no,f_name) values(#{fno},#{fname})
+    </insert>
+    <!--按课程号查找文件名-->
+    <select id="findbyfno" parameterType="java.lang.Integer" resultType="File">
+        select f_name from file where f_no=#{fno} limit #{start},#{limit}
+    </select>
+    <!--按课程号查找文件数量-->
+    <select id="countbyfno" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from file where f_no=#{fno}
+    </select>
+    <!--查找文件是否存在-->
+    <select id="findbyname" parameterType="java.lang.String" resultType="java.lang.String">
+        select f_name from file where f_name=#{fname}
+    </select>
+    <cache/>
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxl.repository.CourseRepository">
+    <resultMap id="courseMap" type="Course">
+        <id column="c_no" property="cNo"></id>
+        <result column="c_name" property="cName"></result>
+        <result column="c_credit" property="cCredit"></result>
+        <result column="c_time" property="cTime"></result>
+        <association property="cTeacher" javaType="Teacher">
+            <result column="t_name" property="tName"></result>
+            <result column="t_no" property="tNo"></result>
+            <result column="academy" property="academy"></result>
+        </association>
+    </resultMap>
+    <!--查询所有课程-->
+    <select id="findAll"  resultType="Course" resultMap="courseMap">
+        select c_no,c_name,c_credit,c_time,t_name,t_no,academy
+        from course join teacher
+        on c_teacher=t_no
+        limit #{start},#{limit}
+    </select>
+    <!--查询课程数量-->
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from course
+    </select>
+    <!--按学院查询课程-->
+    <select id="findByAcademy"  resultType="Course" resultMap="courseMap">
+        select c_no,c_name,c_credit,c_time,t_name,t_no,academy
+        from course join teacher
+        on c_teacher=t_no
+        where academy=#{academy}
+        limit #{start},#{limit}
+    </select>
+    <!--按学院查询课程数量-->
+    <select id="countByAcademy" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*)
+        from course join teacher
+        on c_teacher=t_no
+        where academy=#{academy}
+    </select>
+    <!--按课号删除课程-->
+    <delete id="deletebycno" parameterType="java.lang.String">
+        delete from course where c_no=#{cno}
+    </delete>
+    <!--按课号更新课程-->
+    <update id="updatebycno" parameterType="Course">
+        update course set c_name=#{cName},c_credit=#{cCredit},c_time=#{cTime},c_teacher=#{CTeacher.tNo} where c_no=#{cNo}
+    </update>
+    <!--插入课程-->
+    <update id="insert" parameterType="Course">
+        insert into course(c_name,c_credit,c_time,c_teacher) values(#{cName},#{cCredit},#{cTime},#{CTeacher.tNo})
+    </update>
+    <!--按课号查询课程名-->
+    <select id="findnamebycno" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select c_name from course where c_no=#{cno}
+    </select>
+    <!--按课号查询课程-->
+    <select id="findbycno"  parameterType="java.lang.Integer" resultType="Course" resultMap="courseMap">
+        select c_no,c_name,c_credit,c_time,t_name,t_no,academy
+        from course join teacher
+        on c_teacher=t_no
+        where c_no=#{cno}
+    </select>
+    <!--按课号查询未选课程-->
+    <select id="findnotselcet" resultType="Course" resultMap="courseMap">
+        select c_no,c_name,c_credit,c_time,t_name,t_no,academy
+        from course join teacher
+        on c_teacher=t_no
+        where c_no not in(
+            select  c_no from select_course where s_no=#{sno}
+        )
+        limit #{start},#{limit}
+    </select>
+    <!--按课号查询未选课程数量-->
+    <select id="countnotselcet" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*)
+        from course join teacher
+        on c_teacher=t_no
+        where c_no not in(
+            select c_no from select_course where s_no=#{sno}
+        )
+    </select>
+    <!--按课程号查询上课时间-->
+    <select id="findtimebycno" parameterType="java.lang.String" resultType="java.lang.String">
+        select c_time from course where c_no=#{cno}
+    </select>
+    <!--按教师号查询课程-->
+    <select id="findbytno" resultMap="courseMap">
+        select c_no,c_name,c_credit,c_time,t_name,t_no,academy
+        from course join teacher
+        on c_teacher=t_no
+        where c_teacher=#{tno}
+        limit #{start},#{limit}
+    </select>
+    <!--按教师号查询课程数量-->
+    <select id="countbytno" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*)
+        from course join teacher
+        on c_teacher=t_no
+        where c_teacher=#{tno}
+    </select>
+    <cache/>
+</mapper>

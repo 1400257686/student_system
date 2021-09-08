@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxl.repository.StudentRepository">
+    <!--查询所有学生-->
+    <select id="findAll"  resultType="Student">
+        select * from student limit #{start},#{limit}
+    </select>
+    <!--查询学生数量-->
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from student
+    </select>
+    <!--按学院查询学生-->
+    <select id="findByAcademy"  resultType="Student">
+        select * from student where academy=#{academy} limit #{start},#{limit}
+    </select>
+    <!--按工号查询学生-->
+    <select id="findbysno"  parameterType="String" resultType="Student">
+        select * from student where s_no=#{sno}
+    </select>
+    <!--按学院查询学生数量-->
+    <select id="countByAcademy" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from student where academy=#{academy}
+    </select>
+    <!--按学号删除学生-->
+    <delete id="deletebysno" parameterType="java.lang.String">
+        delete from student where s_no=#{sno}
+    </delete>
+    <!--按学号更新学生-->
+    <update id="updatebysno" parameterType="Student">
+        update student set s_name=#{sName},s_sex=#{sSex},academy=#{academy} where s_no=#{sNo}
+    </update>
+    <!--插入学生-->
+    <insert id="insert" parameterType="Student">
+        insert into student values(#{sNo},#{sName},#{sSex},#{academy})
+    </insert>
+    <!--按学号查询学生姓名-->
+    <select id="selectsname" parameterType="java.lang.String" resultType="java.lang.String">
+        select s_name from student where s_no=#{sno}
+    </select>
+    <cache/>
+</mapper>
