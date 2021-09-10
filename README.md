@@ -34,7 +34,7 @@ CREATE TABLE `course` (
   PRIMARY KEY (`c_no`),
   KEY `teacher_idx` (`c_teacher`),
   CONSTRAINT `teacher` FOREIGN KEY (`c_teacher`) REFERENCES `teacher` (`t_no`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (36,'土木',3,'周二下午','120004'),(37,'设计',2,'周三上午','120005'),(38,'高等数学',1,'周三上午','120006');
+INSERT INTO `course` VALUES (36,'土木',3,'周二下午','120004'),(37,'设计',2,'周三上午','120005'),(38,'高等数学',1,'周三上午','120006'),(62,'c',2,'周二下午','120002'),(64,'java',2,'周二上午','120010'),(65,'c++',2,'周二下午','120015'),(66,'桥梁建筑',2,'周三上午','120004'),(67,'房屋建筑',3,'周四上午','120005'),(68,'高数',2,'周一上午','120006'),(69,'线性代数',2,'周四下午','120012'),(70,'中文',2,'周五下午','120001');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,7 +70,6 @@ CREATE TABLE `file` (
 
 LOCK TABLES `file` WRITE;
 /*!40000 ALTER TABLE `file` DISABLE KEYS */;
-INSERT INTO `file` VALUES (1,36,'第3章_数据链路层.pptx'),(3,36,'第3章_数据链路层.pptx(2)'),(4,36,'第3章_数据链路层.pptx(3)'),(5,36,'第2章练习题.docx'),(6,36,'第2章练习题.docx(2)'),(7,36,'第2章_物理层.pptx'),(8,36,'练习题答案.docx');
 /*!40000 ALTER TABLE `file` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +90,7 @@ CREATE TABLE `scores` (
   KEY `cno_key_idx` (`c_no`),
   CONSTRAINT `cno_key` FOREIGN KEY (`c_no`) REFERENCES `course` (`c_no`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sno_key` FOREIGN KEY (`s_no`) REFERENCES `student` (`s_no`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +99,7 @@ CREATE TABLE `scores` (
 
 LOCK TABLES `scores` WRITE;
 /*!40000 ALTER TABLE `scores` DISABLE KEYS */;
-INSERT INTO `scores` VALUES (1,'1',36,60),(2,'1',37,70),(3,'180007',36,60),(4,'180007',37,NULL);
+INSERT INTO `scores` VALUES (3,'180007',36,60),(4,'180007',37,NULL),(6,'180018',36,NULL),(7,'180018',37,NULL),(8,'180018',68,NULL);
 /*!40000 ALTER TABLE `scores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,7 +119,7 @@ CREATE TABLE `select_course` (
   KEY `c_no_idx` (`c_no`),
   CONSTRAINT `c_no` FOREIGN KEY (`c_no`) REFERENCES `course` (`c_no`),
   CONSTRAINT `s_no key` FOREIGN KEY (`s_no`) REFERENCES `student` (`s_no`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,7 +128,7 @@ CREATE TABLE `select_course` (
 
 LOCK TABLES `select_course` WRITE;
 /*!40000 ALTER TABLE `select_course` DISABLE KEYS */;
-INSERT INTO `select_course` VALUES (1,'1',36),(2,'1',37),(3,'180007',36),(4,'180007',37);
+INSERT INTO `select_course` VALUES (3,'180007',36),(4,'180007',37),(5,'180018',36),(6,'180018',37),(7,'180018',68);
 /*!40000 ALTER TABLE `select_course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,7 +154,7 @@ CREATE TABLE `student` (
 
 LOCK TABLES `student` WRITE;
 /*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` VALUES ('1','李华','女','理学院'),('180007','赵三','男','信息学院'),('180008','李雷','男','信息学院'),('180010','张六','男','建筑学院'),('180011','李会','女','建筑学院'),('180012','钱三','女','建筑学院'),('180015','王为','男','文法学院'),('180016','a','女','文法学院');
+INSERT INTO `student` VALUES ('180007','赵三','男','信息学院'),('180008','李雷','男','信息学院'),('180010','张六','男','建筑学院'),('180011','李会','女','建筑学院'),('180012','钱三','女','建筑学院'),('180015','王为','男','文法学院'),('180016','a','女','文法学院'),('180017','瓦的','女','文法学院'),('180018','瓦基夫','男','理学院'),('180019','阿道夫','男','理学院'),('180020','嗷嗷嗷','女','理学院'),('180021','AA','女','文法学院'),('180022','搭','男','信息学院'),('180023','w(ﾟДﾟ)w','女','理学院'),('180024','昂家','男','建筑学院');
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,7 +180,7 @@ CREATE TABLE `teacher` (
 
 LOCK TABLES `teacher` WRITE;
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
-INSERT INTO `teacher` VALUES ('120001','王计','女','文法学院'),('120002','张法','女','信息学院'),('120004','王敏','男','建筑学院'),('120005','赵柳','女','建筑学院'),('120006','张三','男','理学院'),('120008','wa','女','文法学院');
+INSERT INTO `teacher` VALUES ('120001','王计','女','文法学院'),('120002','张法','女','信息学院'),('120004','王敏','男','建筑学院'),('120005','赵柳','女','建筑学院'),('120006','张三','男','理学院'),('120008','wa','女','文法学院'),('120009','AA','女','文法学院'),('120010','啊哈弗','男','信息学院'),('120011','AA啊','女','文法学院'),('120012','果壳','男','理学院'),('120013','神格','男','理学院'),('120014','噶','女','建筑学院'),('120015','琴恰','女','信息学院'),('120016','孙师傅','女','信息学院');
 /*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,7 +205,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('1','123456','s'),('120001','123456','t'),('120004','123456','t'),('180007','123456','s'),('180015','123456','s'),('180016','123456','s'),('root','123456','r'),('信息学院','123456','a'),('建筑学院','123456','a'),('文法学院','123456','a'),('理学院','123456','a');
+INSERT INTO `user` VALUES ('120001','123456','t'),('120002','123456','t'),('120004','123456','t'),('120005','123456','t'),('120006','123456','t'),('120008','123456','t'),('120009','123456','t'),('120010','123456','t'),('120011','123456','t'),('120012','123456','t'),('120013','123456','t'),('120014','123456','t'),('120015','123456','t'),('120016','123456','t'),('180007','123456','s'),('180008','123456','s'),('180010','123456','s'),('180011','123456','s'),('180012','123456','s'),('180015','123456','s'),('180016','123456','s'),('180017','123456','s'),('180018','123456','s'),('180019','123456','s'),('180020','123456','s'),('180021','123456','s'),('180022','123456','s'),('180023','123456','s'),('180024','123456','s'),('root','123456','r'),('信息学院','123456','a'),('建筑学院','123456','a'),('文法学院','123456','a'),('理学院','123456','a');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -219,4 +218,5 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-09-08 22:51:35
+-- Dump completed on 2021-09-10 20:31:32
+
